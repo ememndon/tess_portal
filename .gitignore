@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# next.js
+apps/web/.next/
+apps/web/out/
+
+# build output
+dist/
+*.tsbuildinfo
+
+# environment, secrets stay out of git
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+
+# misc
+.DS_Store
+
+# Playwright e2e artifacts
+test-results/
+playwright-report/
+backups/
+logs/
+.rclone.conf

@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Graphite and Jade, dense (Preview A, approved).
+ * Every token is defined once here. Dark is the default theme on :root,
+ * light overrides under [data-theme="light"]. Components never hardcode
+ * a color, font, radius, or spacing value.
+ */
+:root {
+  /* color, dark theme (default) */
+  --bg: #101315;
+  --surface: #171b1e;
+  --raised: #1d2226;
+  --line: #262c30;
+  --track: #2a3136;
+  --text: #e9edef;
+  --muted: #98a2a8;
+  --faint: #6b7480;
+  --jade: #34c98e;
+  --jade-fill: #34c98e;
+  --jade-ink: #08110d;
+  --jade-dim: rgba(52, 201, 142, 0.12);
+  --jade-line: rgba(52, 201, 142, 0.35);
+  --violet: #a78bfa;
+  --blue: #5ba8f5;
+  --amber: #e8b450;
+  --gold: #d9b44a;
+  --red: #e06c6c;
+  --red-dim: rgba(224, 108, 108, 0.12);
+
+  /* pipeline stage colors */
+  --stage-saved: #8b95a1;
+  --stage-researching: #a78bfa;
+  --stage-applied: #5ba8f5;
+  --stage-outreach: #e8b450;
+  --stage-interview: #34c98e;
+  --stage-offer: #d9b44a;
+  --stage-rejected: #e06c6c;
+  --stage-ghosted: #6b7480;
+
+  /* density and shape (dense variant ships; spacious is a variable swap) */
+  --pad: 18px;
+  --gap: 12px;
+  --cardpad: 13px;
+  --rowpad: 9px;
+  --toph: 52px;
+  --sidebarw: 212px;
+  --navpad: 6.5px;
+  --radius-card: 14px;
+  --radius-btn: 9px;
+  --radius-input: 10px;
+
+  /* dense type scale */
+  --fs-title: 19px;
+  --fs-cardtitle: 13.5px;
+  --fs-statv: 22px;
+  --fs-body: 12.5px;
+  --fs-sec: 11.5px;
+  --fs-label: 11px;
+  --fs-pill: 10px;
+  --fs-mono: 10.5px;
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  /* same system on warm paper, never cold gray */
+  --bg: #f6f5f2;
+  --surface: #ffffff;
+  --raised: #fafaf8;
+  --line: #e5e3de;
+  --track: #e9e7e2;
+  --text: #1b1f22;
+  --muted: #5c666d;
+  --faint: #8a939a;
+  --jade: #178a5e; /* jade as text or link darkens to hold AA */
+  --jade-fill: #2ab380; /* jade fills stay bright with dark ink on them */
+  --jade-ink: #08110d;
+  --jade-dim: rgba(42, 179, 128, 0.12);
+  --jade-line: rgba(42, 179, 128, 0.35);
+  --violet: #6d4ad1;
+  --blue: #1f65c9;
+  --amber: #8a6100;
+  --gold: #7d6512;
+  --red: #be4040;
+  --red-dim: rgba(190, 64, 64, 0.1);
+
+  --stage-saved: #5c666d;
+  --stage-researching: #6d4ad1;
+  --stage-applied: #1f65c9;
+  --stage-outreach: #8a6100;
+  --stage-interview: #178a5e;
+  --stage-offer: #7d6512;
+  --stage-rejected: #be4040;
+  --stage-ghosted: #5f6871;
+
+  color-scheme: light;
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    @apply bg-bg text-fg font-body antialiased;
+    font-size: var(--fs-body);
+  }
+  /* transitions run 120ms to 160ms, on background and border color only */
+  a,
+  button,
+  input,
+  [role="button"] {
+    transition:
+      background-color 140ms ease,
+      border-color 140ms ease,
+      color 140ms ease;
+  }
+  /* every interactive element gets a visible focus state */
+  :focus-visible {
+    outline: 2px solid var(--jade);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+/* FullCalendar, restyled to Graphite and Jade */
+.tp-calendar {
+  --fc-border-color: var(--line);
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: var(--raised);
+  --fc-today-bg-color: var(--jade-dim);
+  --fc-event-border-color: var(--line);
+  font-size: 12px;
+}
+.tp-calendar .fc .fc-toolbar-title {
+  font-family: var(--font-disp), system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+.tp-calendar .fc .fc-button {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  border-radius: var(--radius-btn);
+  padding: 4px 10px;
+  box-shadow: none;
+}
+.tp-calendar .fc .fc-button:hover {
+  background: var(--raised);
+  color: var(--text);
+}
+.tp-calendar .fc .fc-button-active,
+.tp-calendar .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: var(--jade-dim);
+  border-color: var(--jade-line);
+  color: var(--jade);
+}
+.tp-calendar .fc .fc-col-header-cell-cushion {
+  font-family: var(--font-mono), monospace;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+  padding: 6px 4px;
+}
+.tp-calendar .fc .fc-daygrid-day-number {
+  font-family: var(--font-mono), monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.tp-calendar .fc .fc-event {
+  background: var(--raised);
+  border-left-width: 3px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  padding: 1px 4px;
+}

@@ -1,0 +1,11 @@
+node_modules
+**/node_modules
+apps/web/.next
+.git
+.env
+.env.*
+!.env.example
+*.log
+.claude
+TESS_PORTAL_BUILD_PROMPT.md
+tess-portal-design-preview.html

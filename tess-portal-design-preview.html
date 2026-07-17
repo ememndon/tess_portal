@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tess Portal, Design Direction Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101315; --surface:#171b1e; --raised:#1d2226; --line:#262c30;
+    --text:#e9edef; --muted:#98a2a8; --faint:#6b7480;
+    --jade:#34c98e; --jade-dim:rgba(52,201,142,.12); --jade-line:rgba(52,201,142,.35);
+    --violet:#a78bfa; --blue:#5ba8f5; --amber:#e8b450; --gold:#d9b44a; --red:#e06c6c;
+    --disp:'Manrope',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0a0c0d;color:var(--text);font-family:var(--body);padding:28px 16px 80px}
+  .intro{max-width:1240px;margin:0 auto 26px}
+  .intro h1{font-family:var(--disp);font-weight:800;font-size:22px;letter-spacing:-.02em}
+  .intro p{color:var(--muted);font-size:13.5px;margin-top:6px;max-width:70ch;line-height:1.5}
+  .tokens{max-width:1240px;margin:0 auto 34px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .sw{display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 11px;font-size:12px;color:var(--muted)}
+  .sw i{width:14px;height:14px;border-radius:4px;display:inline-block}
+  .sw b{color:var(--text);font-weight:500;font-family:var(--mono);font-size:11px}
+  .divider{max-width:1240px;margin:0 auto}
+  .divider h2{font-family:var(--disp);font-weight:700;font-size:15px;padding:10px 0 4px;display:flex;align-items:center;gap:10px}
+  .divider h2 .tag{font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--jade);background:var(--jade-dim);border:1px solid var(--jade-line);padding:3px 8px;border-radius:99px}
+  .divider p{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+  .frame{max-width:1240px;margin:0 auto 44px;background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+  @media(max-width:1080px){.frame{overflow-x:auto}}
+  .app{min-width:1040px;display:grid;grid-template-rows:auto 1fr}
+
+  /* top bar */
+  .top{display:flex;align-items:center;gap:14px;padding:0 var(--pad);height:var(--toph);border-bottom:1px solid var(--line);background:var(--surface)}
+  .logo{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:-.01em}
+  .logo i{width:22px;height:22px;border-radius:7px;background:linear-gradient(140deg,var(--jade),#1e8f66);display:inline-flex;align-items:center;justify-content:center;color:#08110d;font-style:normal;font-size:12px;font-weight:800}
+  .search{flex:1;max-width:420px;display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:7px 12px;color:var(--faint);font-size:12.5px}
+  .kbd{margin-left:auto;font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:5px;padding:1px 5px;color:var(--faint)}
+  .top .right{margin-left:auto;display:flex;align-items:center;gap:12px}
+  .cap{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+  .cap b{color:var(--jade);font-weight:500}
+  .bell{position:relative;width:30px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px}
+  .bell u{position:absolute;top:-3px;right:-3px;width:15px;height:15px;border-radius:99px;background:var(--jade);color:#08110d;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;text-decoration:none;font-family:var(--mono)}
+  .ava{width:30px;height:30px;border-radius:99px;background:var(--raised);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--jade)}
+
+  /* body grid */
+  .shell{display:grid;grid-template-columns:212px 1fr;min-height:640px}
+  .nav{border-right:1px solid var(--line);background:var(--surface);padding:14px 10px}
+  .nav .grp{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;color:var(--faint);padding:12px 10px 6px;text-transform:uppercase}
+  .nav a{display:flex;align-items:center;gap:9px;padding:var(--navpad) 10px;border-radius:9px;color:var(--muted);font-size:12.5px;font-weight:500;text-decoration:none;margin-bottom:1px}
+  .nav a span.ic{width:15px;text-align:center;opacity:.85;font-size:12px}
+  .nav a.on{background:var(--jade-dim);color:var(--jade);position:relative}
+  .nav a.on::before{content:'';position:absolute;left:-10px;top:20%;bottom:20%;width:3px;border-radius:3px;background:var(--jade)}
+  .nav a .n{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .nav a.on .n{color:var(--jade)}
+
+  .main{padding:var(--pad);display:flex;flex-direction:column;gap:var(--gap)}
+  .hello h3{font-family:var(--disp);font-weight:800;font-size:var(--h1);letter-spacing:-.02em}
+  .hello p{color:var(--muted);font-size:var(--fs);margin-top:5px;line-height:1.55;max-width:78ch}
+  .hello p b{color:var(--text);font-weight:600}
+  .hello p a{color:var(--jade);text-decoration:none;font-weight:600}
+
+  .stats{display:grid;grid-template-columns:repeat(var(--statcols),1fr);gap:var(--gap)}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:var(--cardpad)}
+  .stat .l{font-size:11px;color:var(--muted);font-weight:500}
+  .stat .v{font-family:var(--disp);font-weight:800;font-size:var(--statv);margin-top:4px;letter-spacing:-.02em}
+  .stat .d{font-family:var(--mono);font-size:10.5px;margin-top:4px;color:var(--faint)}
+  .stat .d.up{color:var(--jade)}
+
+  .cols{display:grid;grid-template-columns:1fr 316px;gap:var(--gap);align-items:start}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+  .card .hd{display:flex;align-items:center;padding:var(--cardpad);padding-bottom:10px}
+  .card .hd h4{font-family:var(--disp);font-weight:700;font-size:13.5px}
+  .card .hd .more{margin-left:auto;font-size:11.5px;color:var(--jade);font-weight:600}
+
+  /* job rows */
+  .job{display:flex;align-items:center;gap:12px;padding:var(--rowpad) var(--cardpad);border-top:1px solid var(--line)}
+  .ring{--p:78;width:var(--ringsz);height:var(--ringsz);border-radius:99px;flex:0 0 auto;background:conic-gradient(var(--jade) calc(var(--p)*1%),#2a3136 0);display:flex;align-items:center;justify-content:center}
+  .ring b{width:calc(var(--ringsz) - 8px);height:calc(var(--ringsz) - 8px);border-radius:99px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:var(--ringfs);font-weight:500;color:var(--text)}
+  .job .t{min-width:0;flex:1}
+  .job .t .r1{font-weight:600;font-size:var(--fs);display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden}
+  .job .t .r2{color:var(--muted);font-size:11.5px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pill{font-size:10px;font-weight:600;border-radius:99px;padding:2.5px 8px;white-space:nowrap}
+  .p-jade{color:var(--jade);background:var(--jade-dim)}
+  .p-blue{color:var(--blue);background:rgba(91,168,245,.12)}
+  .p-amber{color:var(--amber);background:rgba(232,180,80,.12)}
+  .p-violet{color:var(--violet);background:rgba(167,139,250,.12)}
+  .p-gray{color:var(--muted);background:rgba(152,162,168,.12)}
+  .job .meta{font-family:var(--mono);font-size:10.5px;color:var(--faint);white-space:nowrap}
+  .job .go{border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:11.5px;font-weight:600;border-radius:8px;padding:6px 12px}
+
+  /* right rail */
+  .rail{display:flex;flex-direction:column;gap:var(--gap)}
+  .ap{padding:var(--cardpad);border-top:1px solid var(--line)}
+  .ap .w{font-size:12.5px;font-weight:600;line-height:1.45}
+  .ap .s{color:var(--muted);font-size:11.5px;margin-top:3px;line-height:1.5}
+  .ap .row{display:flex;gap:8px;margin-top:10px}
+  .btn{font-size:11.5px;font-weight:700;border-radius:8px;padding:6px 13px;border:1px solid transparent}
+  .btn.ok{background:var(--jade);color:#08110d}
+  .btn.no{background:transparent;border-color:var(--line);color:var(--muted)}
+  .ev{display:flex;gap:11px;padding:var(--rowpad) var(--cardpad);border-top:1px solid var(--line);align-items:center}
+  .ev .dt{font-family:var(--mono);font-size:10.5px;color:var(--jade);background:var(--jade-dim);border-radius:8px;padding:6px 8px;text-align:center;line-height:1.35;min-width:52px}
+  .ev .t b{display:block;font-size:12.5px;font-weight:600}
+  .ev .t span{font-size:11px;color:var(--muted)}
+  .meter{padding:var(--cardpad);border-top:1px solid var(--line)}
+  .meter .bar{height:6px;border-radius:99px;background:#2a3136;margin-top:9px;overflow:hidden}
+  .meter .bar i{display:block;height:100%;width:33%;background:var(--jade);border-radius:99px}
+  .meter .lb{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:7px}
+  .meter .lb b{color:var(--text);font-weight:500}
+
+  /* density: A dense */
+  .dense{--pad:18px;--gap:12px;--cardpad:13px;--rowpad:9px;--toph:52px;--navpad:6.5px;
+         --h1:19px;--fs:12.5px;--statv:22px;--statcols:6;--ringsz:36px;--ringfs:10px}
+  /* density: B spacious */
+  .airy{--pad:28px;--gap:18px;--cardpad:18px;--rowpad:14px;--toph:60px;--navpad:9px;
+        --h1:23px;--fs:13.5px;--statv:28px;--statcols:4;--ringsz:44px;--ringfs:11px}
+  .airy .job .t .r1{font-size:14px}
+  .airy .job .t .r2{font-size:12.5px;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="intro">
+  <h1>Tess Portal, design direction: Graphite and Jade</h1>
+  <p>Neutral graphite base, one jade accent used with restraint, muted status colors, hairline borders, soft 14px corners. Manrope for headings, Inter for body, JetBrains Mono only for data. The signature element is the jade match score ring on every job. Same direction below in two densities. Compare and pick one.</p>
+</div>
+
+<div class="tokens">
+  <span class="sw"><i style="background:#101315"></i>Background <b>#101315</b></span>
+  <span class="sw"><i style="background:#171b1e"></i>Surface <b>#171B1E</b></span>
+  <span class="sw"><i style="background:#34c98e"></i>Jade accent <b>#34C98E</b></span>
+  <span class="sw"><i style="background:#e9edef"></i>Text <b>#E9EDEF</b></span>
+  <span class="sw"><i style="background:#98a2a8"></i>Muted <b>#98A2A8</b></span>
+  <span class="sw">Aa Manrope, headings</span>
+  <span class="sw">Aa Inter, body</span>
+  <span class="sw"><b>Aa JetBrains Mono, data</b></span>
+</div>
+
+<div class="divider">
+  <h2>Preview A <span class="tag">DENSE</span></h2>
+  <p>Data-rich, six stat cards, compact rows, more visible per screen. Closer in energy to the Jobs Monitor style you know.</p>
+</div>
+
+<div class="frame"><div class="app dense">
+  <div class="top">
+    <div class="logo"><i>T</i>Tess Portal</div>
+    <div class="search">Search jobs, companies, contacts<span class="kbd">Ctrl K</span></div>
+    <div class="right">
+      <span class="cap">Cost <b>$13.20</b> / $40</span>
+      <span class="bell">&#128276;<u>3</u></span>
+      <span class="ava">E</span>
+    </div>
+  </div>
+  <div class="shell">
+    <nav class="nav">
+      <div class="grp">Work</div>
+      <a class="on"><span class="ic">&#9638;</span>Pipeline<span class="n">18</span></a>
+      <a><span class="ic">&#10023;</span>Discover<span class="n">12</span></a>
+      <a><span class="ic">&#9998;</span>Documents</a>
+      <a><span class="ic">&#9993;</span>Outreach<span class="n">4</span></a>
+      <a><span class="ic">&#9737;</span>Companies</a>
+      <a><span class="ic">&#9743;</span>Interviews &amp; Offers</a>
+      <a><span class="ic">&#9783;</span>Calendar</a>
+      <div class="grp">Tess</div>
+      <a><span class="ic">&#10086;</span>Chat</a>
+      <a><span class="ic">&#9636;</span>Playbooks</a>
+      <a><span class="ic">&#9881;</span>Jobs Monitor</a>
+      <a><span class="ic">&#9776;</span>Audit Log</a>
+      <div class="grp">System</div>
+      <a><span class="ic">&#9650;</span>Analytics</a>
+      <a><span class="ic">&#9881;</span>Settings</a>
+      <a><span class="ic">&#9819;</span>Admin</a>
+    </nav>
+    <div class="main">
+      <div class="hello">
+        <h3>Good morning, Emem</h3>
+        <p><b>Tess:</b> Overnight I found 12 new matches across Ireland and the Netherlands, 3 score above 80. Two follow-ups are due today and your Veldkamp interview is Tuesday, the <a>prep pack is ready</a>. 3 items are waiting for your approval.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="l">In pipeline</div><div class="v">18</div><div class="d up">+3 this week</div></div>
+        <div class="stat"><div class="l">Applied this week</div><div class="v">5</div><div class="d">goal 6</div></div>
+        <div class="stat"><div class="l">Interviews</div><div class="v">2</div><div class="d up">1 scheduled</div></div>
+        <div class="stat"><div class="l">Awaiting approval</div><div class="v" style="color:var(--amber)">3</div><div class="d">oldest 2h</div></div>
+        <div class="stat"><div class="l">New matches</div><div class="v">12</div><div class="d up">3 above 80</div></div>
+        <div class="stat"><div class="l">Response rate</div><div class="v">21%</div><div class="d up">+4 pts</div></div>
+      </div>
+      <div class="cols">
+        <div class="card">
+          <div class="hd"><h4>New matches, freshest first</h4><span class="more">Open Discover</span></div>
+          <div class="job"><span class="ring" style="--p:88"><b>88</b></span>
+            <div class="t"><div class="r1">Full-Stack Developer (TypeScript) <span class="pill p-jade">IND sponsor</span><span class="pill p-blue">Relocation</span></div>
+            <div class="r2">Veldkamp Software &middot; Amsterdam, NL &middot; &euro;5,200/mo gross &middot; via careers page</div></div>
+            <span class="meta">4h ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:84"><b>84</b></span>
+            <div class="t"><div class="r1">Software Engineer, Platform <span class="pill p-jade">Permit-friendly</span></div>
+            <div class="r2">Arden Labs &middot; Dublin, IE &middot; &euro;72k &middot; via Greenhouse</div></div>
+            <span class="meta">9h ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:81"><b>81</b></span>
+            <div class="t"><div class="r1">Frontend Developer (React) <span class="pill p-jade">Accredited</span><span class="pill p-violet">Hybrid</span></div>
+            <div class="r2">Southern Cross Digital &middot; Wellington, NZ &middot; NZ$115k &middot; via Seek</div></div>
+            <span class="meta">14h ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:73"><b>73</b></span>
+            <div class="t"><div class="r1">Node.js Developer <span class="pill p-amber">Sponsorship inferred</span></div>
+            <div class="r2">Liffey Fintech &middot; Dublin, IE &middot; &euro;65k &plus; bonus &middot; via IrishJobs</div></div>
+            <span class="meta">1d ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:66"><b>66</b></span>
+            <div class="t"><div class="r1">Full-Stack Engineer <span class="pill p-gray">No visa info</span></div>
+            <div class="r2">Windmill Works &middot; Utrecht, NL &middot; &euro;4,600/mo &middot; via IamExpat</div></div>
+            <span class="meta">1d ago</span><button class="go">Prepare</button></div>
+        </div>
+        <div class="rail">
+          <div class="card">
+            <div class="hd"><h4>Approvals</h4><span class="more">All</span></div>
+            <div class="ap"><div class="w">Outreach email to Sarah Boyle, Engineering Manager at Arden Labs</div>
+              <div class="s">References their migration post. 142 words.</div>
+              <div class="row"><button class="btn ok">Approve &amp; send</button><button class="btn no">Review</button></div></div>
+            <div class="ap"><div class="w">Follow-up 2 to recruiter at Southern Cross Digital</div>
+              <div class="s">6 days since last reply. Gentle tone.</div>
+              <div class="row"><button class="btn ok">Approve &amp; send</button><button class="btn no">Review</button></div></div>
+          </div>
+          <div class="card">
+            <div class="hd"><h4>Today</h4><span class="more">Calendar</span></div>
+            <div class="ev"><span class="dt">TUE<br>10:00</span><div class="t"><b>Interview, Veldkamp Software</b><span>Round 1, video &middot; 10:00 CET</span></div></div>
+            <div class="ev"><span class="dt">TODAY<br>17:00</span><div class="t"><b>Follow-up due, Arden Labs</b><span>Outreach sequence, step 2</span></div></div>
+          </div>
+          <div class="card"><div class="hd"><h4>Monthly AI budget</h4></div>
+            <div class="meter" style="border-top:none;padding-top:0"><div class="lb"><b>$13.20 used</b><span>cap $40</span></div>
+            <div class="bar"><i></i></div><div class="lb"><span>free tier covered 71% of calls</span><span>alerts at 80%</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<div class="divider">
+  <h2>Preview B <span class="tag">SPACIOUS</span></h2>
+  <p>Same system, more air. Four stat cards, larger type, fewer things competing. Calmer to live in every day.</p>
+</div>
+
+<div class="frame"><div class="app airy">
+  <div class="top">
+    <div class="logo"><i>T</i>Tess Portal</div>
+    <div class="search">Search jobs, companies, contacts<span class="kbd">Ctrl K</span></div>
+    <div class="right">
+      <span class="cap">Cost <b>$13.20</b> / $40</span>
+      <span class="bell">&#128276;<u>3</u></span>
+      <span class="ava">E</span>
+    </div>
+  </div>
+  <div class="shell">
+    <nav class="nav">
+      <div class="grp">Work</div>
+      <a class="on"><span class="ic">&#9638;</span>Pipeline<span class="n">18</span></a>
+      <a><span class="ic">&#10023;</span>Discover<span class="n">12</span></a>
+      <a><span class="ic">&#9998;</span>Documents</a>
+      <a><span class="ic">&#9993;</span>Outreach<span class="n">4</span></a>
+      <a><span class="ic">&#9737;</span>Companies</a>
+      <a><span class="ic">&#9743;</span>Interviews &amp; Offers</a>
+      <a><span class="ic">&#9783;</span>Calendar</a>
+      <div class="grp">Tess</div>
+      <a><span class="ic">&#10086;</span>Chat</a>
+      <a><span class="ic">&#9636;</span>Playbooks</a>
+      <a><span class="ic">&#9881;</span>Jobs Monitor</a>
+      <a><span class="ic">&#9776;</span>Audit Log</a>
+      <div class="grp">System</div>
+      <a><span class="ic">&#9650;</span>Analytics</a>
+      <a><span class="ic">&#9881;</span>Settings</a>
+      <a><span class="ic">&#9819;</span>Admin</a>
+    </nav>
+    <div class="main">
+      <div class="hello">
+        <h3>Good morning, Emem</h3>
+        <p><b>Tess:</b> 12 new matches overnight, 3 score above 80. Your Veldkamp interview is Tuesday and the <a>prep pack is ready</a>. 3 approvals are waiting.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="l">In pipeline</div><div class="v">18</div><div class="d up">+3 this week</div></div>
+        <div class="stat"><div class="l">Interviews</div><div class="v">2</div><div class="d up">1 scheduled</div></div>
+        <div class="stat"><div class="l">Awaiting approval</div><div class="v" style="color:var(--amber)">3</div><div class="d">oldest 2h</div></div>
+        <div class="stat"><div class="l">New matches</div><div class="v">12</div><div class="d up">3 above 80</div></div>
+      </div>
+      <div class="cols">
+        <div class="card">
+          <div class="hd"><h4>New matches</h4><span class="more">Open Discover</span></div>
+          <div class="job"><span class="ring" style="--p:88"><b>88</b></span>
+            <div class="t"><div class="r1">Full-Stack Developer (TypeScript) <span class="pill p-jade">IND sponsor</span></div>
+            <div class="r2">Veldkamp Software &middot; Amsterdam, NL &middot; &euro;5,200/mo gross</div></div>
+            <span class="meta">4h ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:84"><b>84</b></span>
+            <div class="t"><div class="r1">Software Engineer, Platform <span class="pill p-jade">Permit-friendly</span></div>
+            <div class="r2">Arden Labs &middot; Dublin, IE &middot; &euro;72k</div></div>
+            <span class="meta">9h ago</span><button class="go">Prepare</button></div>
+          <div class="job"><span class="ring" style="--p:81"><b>81</b></span>
+            <div class="t"><div class="r1">Frontend Developer (React) <span class="pill p-jade">Accredited</span></div>
+            <div class="r2">Southern Cross Digital &middot; Wellington, NZ &middot; NZ$115k</div></div>
+            <span class="meta">14h ago</span><button class="go">Prepare</button></div>
+        </div>
+        <div class="rail">
+          <div class="card">
+            <div class="hd"><h4>Approvals</h4><span class="more">All</span></div>
+            <div class="ap"><div class="w">Outreach email to Sarah Boyle at Arden Labs</div>
+              <div class="s">References their migration post. 142 words.</div>
+              <div class="row"><button class="btn ok">Approve &amp; send</button><button class="btn no">Review</button></div></div>
+          </div>
+          <div class="card">
+            <div class="hd"><h4>Today</h4><span class="more">Calendar</span></div>
+            <div class="ev"><span class="dt">TUE<br>10:00</span><div class="t"><b>Interview, Veldkamp Software</b><span>Round 1, video &middot; 10:00 CET</span></div></div>
+            <div class="ev"><span class="dt">TODAY<br>17:00</span><div class="t"><b>Follow-up due, Arden Labs</b><span>Sequence step 2</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+</body>
+</html>
