@@ -80,31 +80,38 @@ loop that must never fabricate a fact or act without the user's consent.
 
 ```mermaid
 flowchart LR
+    Browser["User browser"]
+
     subgraph Edge
         Caddy["Caddy (TLS, reverse proxy)"]
     end
 
     subgraph Core["Tess Portal"]
-        Web["Next.js app<br/>UI · API · Agent · Vault · SSE"]
+        Web["Next.js app<br/>UI · API · Agent · Vault"]
         Worker["Worker<br/>BullMQ scheduler · discovery · mailbox sync"]
     end
 
-    subgraph Data
-        DB[(PostgreSQL 16<br/>+ pgvector)]
-        Redis[(Redis<br/>queues)]
+    subgraph Data["Data stores"]
+        DB[(PostgreSQL 16 with pgvector)]
+        Redis[(Redis queues)]
         Search[(Meilisearch)]
     end
 
-    Browser["User browser"] -->|HTTPS| Caddy --> Web
+    Providers["Job APIs and ATS<br/>Careerjet · Adzuna · JSearch · Jooble · Reed · Greenhouse · Lever"]
+    Registers["Sponsor registers<br/>UK · IE · NL · CA"]
+    Mail[(User mailbox)]
+    LLM["LLM providers<br/>Claude · OpenAI · others"]
+
+    Browser -->|HTTPS| Caddy --> Web
     Web <--> DB
     Web <--> Redis
     Web <--> Search
     Worker <--> DB
     Worker <--> Redis
-    Worker -->|search| Providers["Job APIs + ATS<br/>Careerjet · Adzuna · JSearch · Jooble · Reed · Greenhouse · Lever · ..."]
-    Worker -->|ingest| Registers["Government sponsor registers<br/>UK · IE · NL · CA"]
-    Web -->|IMAP/SMTP| Mail[(User mailbox)]
-    Web -->|pluggable| LLM["LLM providers<br/>Claude / OpenAI / others"]
+    Worker -->|search| Providers
+    Worker -->|ingest| Registers
+    Web -->|IMAP/SMTP| Mail
+    Web -->|pluggable| LLM
 ```
 
 The web app serves the UI and API and runs the agent; a separate worker process
