@@ -34,6 +34,14 @@ It is the kind of system that is easy to demo and hard to build correctly: real
 job APIs, real employer data, a real embedded email client, and an LLM in the
 loop that must never fabricate a fact or act without the user's consent.
 
+## Demo video
+
+<a href="https://ememndon.com/videos/tess_portal.mp4">
+  <img src=".github/assets/video-poster.png" alt="Tess Portal demo video, click to play" width="100%">
+</a>
+
+*Click the image above to watch the full walkthrough.*
+
 ## Feature surface
 
 **Discovery engine**
