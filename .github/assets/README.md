@@ -9,7 +9,7 @@ the main README picks them up automatically:
 | `screenshot-pipeline.png` | Pipeline | The drag-and-drop board (Saved → Applied → Interview → Offer) |
 | `screenshot-mailbox.png` | Mailbox | Inbox with a thread open (avoid showing real personal email content) |
 | `screenshot-chat.png` | Tess (agent) | The conversational assistant, ideally with an approval-gated action |
-| `screenshot-analytics.png` | Analytics | Salary bands and the application funnel (optional) |
+| `screenshot-settings.png` | Settings | User settings and Preference (optional) |
 | `video-poster.png` | — | A poster frame for the demo video (optional) |
 
 **Recommended:** 1600px wide or larger, PNG. Avoid showing real personal data
