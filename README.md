@@ -42,6 +42,22 @@ loop that must never fabricate a fact or act without the user's consent.
 
 *Click the image above to watch the full walkthrough.*
 
+## Screenshots
+
+> Captured from a live instance. Personal details have been redacted.
+
+**Discover:** scored jobs filtered for relevance, with confirmed visa-sponsor badges, salaries in the employer's own currency, and the gate that hides roles it cannot verify.
+
+![Discover](.github/assets/screenshot-discover.png)
+
+**Pipeline:** the application board from Saved through to Offer, with an outbound email waiting in the approval queue at the top.
+
+![Pipeline](.github/assets/screenshot-pipeline.png)
+
+**Settings:** target roles and countries, the "only show visa sponsorship" switch, and the choice of which AI model runs each task (free providers are tried first, paid ones only as a fallback).
+
+![Settings](.github/assets/screenshot-settings.png)
+
 ## Feature surface
 
 **Discovery engine**
