@@ -1,25 +1,25 @@
 # Tess Portal
 
-**An agentic job-search platform where an AI agent (Tess) runs an international
-job hunt end to end — discovering roles, verifying visa sponsorship against
-official government registers, tailoring applications, handling outreach and a
-built-in mailbox, preparing for interviews, and coaching salary negotiation —
-all under a human-approval gate on every outbound action.**
+**An agentic job search platform where an AI agent (Tess) runs an international
+job hunt from start to finish. She discovers roles, verifies visa sponsorship
+against official government registers, tailors applications, handles outreach
+through an embedded mailbox, prepares you for interviews, and coaches salary
+negotiation, all behind a human approval gate on every outbound action.**
 
-Built solo, from empty repo to a live, invite-only production deployment, in TypeScript/Next.js on a self-managed VPS.
+Built solo, from an empty repo to a live, invite only production deployment, in TypeScript and Next.js on a self managed VPS.
 
 > 📌 **This is a public portfolio snapshot for you to review.**
 > Secrets, environment files, backups, and internal operational documents are
-> excluded — this repo is source-for-review, not a turnkey deploy. See
+> excluded. This repo is source for review, not a turnkey deploy. See
 > `.env.example` for the shape of the required configuration.
 
 ---
 
 ## What it is
 
-Most job-search tools help you *find* postings. The hard problems start after
-that: is this role actually relevant, does the salary work, and — for anyone
-job-hunting across borders — **can this employer even sponsor a work visa?** You
+Most job search tools help you *find* postings. The hard problems start after
+that. Is this role actually relevant? Does the salary work? And for anyone job
+hunting across borders, **can this employer even sponsor a work visa?** You
 usually find that last one out weeks in, after the interviews.
 
 Tess Portal solves that. An AI agent ("Tess", powered by Claude with pluggable
@@ -28,7 +28,7 @@ relevance, and verifies visa sponsorship against official government registers
 before a job is ever shown. From there she drafts tailored applications, manages
 outreach through an embedded mailbox, researches companies, prepares interview
 answers grounded in the user's real experience, and coaches salary negotiation
-from real market data — never sending anything without explicit human approval.
+from real market data. She never sends anything without explicit human approval.
 
 It is the kind of system that is easy to demo and hard to build correctly: real
 job APIs, real employer data, a real embedded email client, and an LLM in the
@@ -46,7 +46,7 @@ loop that must never fabricate a fact or act without the user's consent.
 
 > Captured from a live instance. Personal details have been redacted.
 
-**Discover:** scored jobs filtered for relevance, with confirmed visa-sponsor badges, salaries in the employer's own currency, and the gate that hides roles it cannot verify.
+**Discover:** scored jobs filtered for relevance, with confirmed visa sponsor badges, salaries in the employer's own currency, and the gate that hides roles it cannot verify.
 
 ![Discover](.github/assets/screenshot-discover.png)
 
@@ -62,43 +62,43 @@ loop that must never fabricate a fact or act without the user's consent.
 
 **Discovery engine**
 - Searches five job APIs (Careerjet, Adzuna, JSearch, Jooble, Reed) and seven
-  applicant-tracking systems (Greenhouse, Lever, Ashby, Workable, SmartRecruiters,
+  applicant tracking systems (Greenhouse, Lever, Ashby, Workable, SmartRecruiters,
   Recruitee, Teamtailor) across five countries
-- Two-stage relevance filter: a deterministic title gate + an embedding-similarity
-  rescue (pgvector), so twenty right jobs beat two hundred wrong ones
-- A geo-sanity layer that stops a country-blind provider from mislabelling jobs
+- A two stage relevance filter: a deterministic title gate, plus an embedding
+  similarity rescue (pgvector), so twenty right jobs beat two hundred wrong ones
+- A geo sanity layer that stops a country blind provider from mislabelling jobs
 - Runs on a deterministic nightly schedule, independent of the LLM
 
-**Visa-sponsorship verification**
-- Matches every job's employer against official licensed-sponsor registers
-  (UK, Ireland, Netherlands, Canada) — ingested and refreshed automatically
-- Unverifiable roles in register countries are hidden by default; confirmed
-  sponsors are badged; nothing is guessed
+**Visa sponsorship verification**
+- Matches every job's employer against official licensed sponsor registers
+  (UK, Ireland, Netherlands, Canada), ingested and refreshed automatically
+- Unverifiable roles in register countries are hidden by default. Confirmed
+  sponsors are badged. Nothing is guessed
 - Salaries shown in the employer's own currency, never silently converted
 
-**Applications & pipeline**
-- Drag-and-drop pipeline board (Saved → Applied → Interview → Offer)
-- CV and cover-letter tailoring drawn from the user's real CV, per posting
-- Company research briefs that cite their sources — no source, no claim
+**Applications and pipeline**
+- A drag and drop pipeline board (Saved → Applied → Interview → Offer)
+- CV and cover letter tailoring drawn from the user's real CV, per posting
+- Company research briefs that cite their sources. No source, no claim
 
-**Embedded mailbox & outreach**
-- Full IMAP/SMTP email client: threading, rich compose, undo/scheduled send,
-  drafts autosave, filing rules, search operators, snooze
-- AI-drafted replies ("Draft with Tess") — suggested, never auto-sent
-- Approval-gated cold-outreach sequences with per-contact research
+**Embedded mailbox and outreach**
+- A full IMAP and SMTP email client: threading, rich compose, undo and scheduled
+  send, drafts autosave, filing rules, search operators, snooze
+- Replies drafted by Tess ("Draft with Tess"), suggested and never sent automatically
+- Cold outreach sequences behind the approval gate, with research on each contact
 
-**Interview & offer**
+**Interview and offer**
 - Interview prep packs generated when an interview is scheduled: likely questions
-  mapped only to the user's real projects and STAR stories — never fabricated
-- Negotiation coach anchored on real observed salary data, reported in the
+  mapped only to the user's real projects and STAR stories, never fabricated
+- A negotiation coach anchored on real observed salary data, reported in the
   market's own currency, honest about small sample sizes
 
-**Security & operation**
-- Human-in-the-loop: every outbound action is queued for explicit approval
-- Encrypted secrets vault (AES-256-GCM, server-only decrypt) for third-party keys —
-  never exposes raw values to the client or logs
-- Invite-only access with a shared front-door gate and per-user login
-- Full audit log; nightly GPG-encrypted offsite backups; logger with secret redaction
+**Security and operation**
+- A human stays in the loop. Every outbound action is queued for explicit approval
+- Encrypted secrets vault (AES-256-GCM, decrypted only on the server) for third
+  party keys, so raw values never reach the client or the logs
+- Invite only access with a shared front door gate and a personal login
+- Full audit log, nightly encrypted offsite backups, and a logger that redacts secrets
 
 ## Architecture
 
@@ -138,47 +138,47 @@ flowchart LR
     Web -->|pluggable| LLM
 ```
 
-The web app serves the UI and API and runs the agent; a separate worker process
-owns everything slow or scheduled — the nightly discovery firehose, sponsor-register
-ingestion, mailbox sync, and reminders — so heavy background work never blocks the
-request path. Discovery, sponsorship resolution, and relevance scoring are
-deterministic and keep running even when the LLM is unavailable. Nothing is
-reachable from the internet except through the Caddy reverse proxy.
+The web app serves the UI and API and runs the agent. A separate worker process
+owns everything slow or scheduled, including the nightly discovery firehose,
+sponsor register ingestion, mailbox sync, and reminders, so heavy background work
+never blocks the request path. Discovery, sponsorship resolution, and relevance
+scoring are deterministic and keep running even when the LLM is unavailable.
+Nothing is reachable from the internet except through the Caddy reverse proxy.
 
 ## Tech stack
 
 | Layer | Choice |
 |---|---|
-| Framework | Next.js 16 (App Router, TypeScript) + React 19 |
-| Database | PostgreSQL 16 + pgvector, Drizzle ORM |
-| Queues / jobs | Redis + BullMQ |
+| Framework | Next.js 16 (App Router, TypeScript) and React 19 |
+| Database | PostgreSQL 16 with pgvector, Drizzle ORM |
+| Queues and jobs | Redis and BullMQ |
 | Search | Meilisearch |
-| Agent / LLM | Anthropic SDK (Claude), cost-aware routing, pluggable providers |
-| Embeddings | pgvector similarity for relevance + dedup |
-| Mail | IMAP/SMTP embedded client (imapflow · mailparser · nodemailer) |
+| Agent and LLM | Anthropic SDK (Claude), cost aware routing, pluggable providers |
+| Embeddings | pgvector similarity for relevance and deduplication |
+| Mail | Embedded IMAP and SMTP client (imapflow · mailparser · nodemailer) |
 | UI | Tailwind CSS |
-| Auth | session-based, hashed passwords, invite + gate + per-user login |
-| Secrets | AES-256-GCM vault, server-only decrypt, live "test connection" probes |
-| Infra | Docker Compose, Caddy (reverse proxy + auto-TLS), Linux VPS |
-| Tests | Vitest (web + worker), Playwright config |
+| Auth | Session based, hashed passwords, invite plus gate plus personal login |
+| Secrets | AES-256-GCM vault, decrypted only on the server, live "test connection" probes |
+| Infra | Docker Compose, Caddy (reverse proxy with automatic TLS), Linux VPS |
+| Tests | Vitest (web and worker), Playwright config |
 
 ## Project structure
 
 ```
 apps/
-  web/                 Next.js application (UI + API + agent)
+  web/                 Next.js application (UI, API, agent)
     app/(portal)/      Page routes: discover, pipeline, mailbox, chat, companies,
                         interviews, outreach, analytics, calendar, documents,
-                        playbooks, admin, settings, audit-log, ...
-    app/api/           62 route handlers (REST + SSE + internal)
+                        playbooks, admin, settings, audit log
+    app/api/           62 route handlers (REST, SSE, internal)
     lib/               agent tools, server DAL, secrets vault, mail, intel (salary,
                         interview prep, company briefs, recommendations)
     tests/             web test suites (Vitest)
   worker/              Background worker process
-    src/discovery/     the discovery firehose: provider + ATS adapters, relevance
-                        gate, sponsor-register ingestion, scoring, dedup, geo checks
-    src/mailbox/       IMAP/SMTP sync
-    src/scheduler.ts   BullMQ scheduled tasks (nightly discovery, ingestion, ...)
+    src/discovery/     the discovery firehose: provider and ATS adapters, relevance
+                        gate, sponsor register ingestion, scoring, dedup, geo checks
+    src/mailbox/       IMAP and SMTP sync
+    src/scheduler.ts   BullMQ scheduled tasks (nightly discovery, ingestion)
     tests/             worker test suites (Vitest)
 packages/
   db/                  Drizzle schema (65 tables), 19 SQL migrations, clients
@@ -189,24 +189,24 @@ scripts/               Ops: env generation, backups, offsite sync, test runner
 
 ## Running it
 
-This snapshot excludes secrets and infra config, so it will not deploy as-is —
-but the shape is:
+This snapshot excludes secrets and infrastructure config, so it will not deploy
+as it stands, but the shape is:
 
 ```bash
 ./scripts/generate-env.sh    # generates .env with fresh secrets (never committed)
 docker compose build
 docker compose up -d          # starts web, worker, db, redis, search
-bash scripts/run-tests.sh     # web + worker test suites
+bash scripts/run-tests.sh     # web and worker test suites
 ```
 
-`.env.example` documents every required variable. Third-party API keys (LLM
-providers, job APIs, mail) are entered at runtime through the in-app encrypted
-Secrets Vault — nothing is hardcoded or required at build time beyond the core
-platform variables.
+`.env.example` documents every required variable. Third party API keys (LLM
+providers, job APIs, mail) are entered at runtime through the encrypted Secrets
+Vault inside the app. Nothing is hardcoded or required at build time beyond the
+core platform variables.
 
 ## License
 
-Proprietary — all rights reserved. Shared publicly for review purposes only
+Proprietary. All rights reserved. Shared publicly for review purposes only
 (portfolio, hiring, technical due diligence). Not licensed for reuse,
 redistribution, or deployment. See [LICENSE](LICENSE).
 
